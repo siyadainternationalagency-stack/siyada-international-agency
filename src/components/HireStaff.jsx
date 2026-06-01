@@ -720,7 +720,7 @@ export default function HireStaff() {
                 name="salary_budget"
                 value={formData.salary_budget}
                 onChange={handleChange}
-                placeholder="SAR 1800 - 3000"
+                placeholder=""
                 className="w-full border rounded-xl p-4"
               />
             </div>
