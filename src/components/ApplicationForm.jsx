@@ -715,7 +715,7 @@ console.log("Submitting application:", cleanedData);
                 value={formData.expected_salary}
                 onChange={handleChange}
                 className="w-full border rounded-xl p-4"
-                placeholder="2500"
+                placeholder="Example 2500"
               />
             </div>
 
