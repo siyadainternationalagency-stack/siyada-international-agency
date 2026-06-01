@@ -29,7 +29,7 @@ export default function Footer() {
             <div className="mb-8">
 
               <h2 className="text-4xl font-black leading-tight mb-4">
-                Siyada International
+                Precious Siyada International Recruiting Agency
               </h2>
 
               <p className="text-green-500 font-semibold text-lg">
@@ -237,7 +237,7 @@ export default function Footer() {
             <div>
 
               <p className="text-gray-500 text-center lg:text-left text-lg">
-                © 2026 Siyada International Agency. All rights reserved.
+                © 2026 Precious Siyada International Recruiting Agency. All rights reserved.
               </p>
 
             </div>

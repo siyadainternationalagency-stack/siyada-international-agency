@@ -15,7 +15,7 @@ export default function Hero() {
           {/* Main Heading */}
           <h1 className="text-5xl md:text-7xl font-bold text-gray-900 leading-tight mb-8">
 
-            Siyada <span className="text-amber-600">International</span> Agency
+            <span className="text-amber-500">Precious</span> Siyada <span className="text-amber-600"> International</span> <span className="text-amber-900"> Recruiting</span> Agency
 
           </h1>
 

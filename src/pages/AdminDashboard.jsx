@@ -4,7 +4,7 @@ import { supabase } from "../lib/supabase"
 export default function AdminDashboard() {
 
   // ADMIN PASSWORD
-  const ADMIN_PASSWORD = "SiyadaAdmin123"
+  const ADMIN_PASSWORD = "13489341Jesus"
 
   // STATES
   const [password, setPassword] = useState("")
@@ -13,6 +13,9 @@ export default function AdminDashboard() {
   const [applications, setApplications] = useState([])
   const [jobs, setJobs] = useState([])
   const [messages, setMessages] = useState([])
+  const [employerRequests, setEmployerRequests] = useState([])
+
+  const [selectedRequest, setSelectedRequest] = useState(null)
 
   const [loading, setLoading] = useState(false)
 
@@ -45,44 +48,65 @@ export default function AdminDashboard() {
 
     setLoading(true)
 
-    // FETCH APPLICATIONS
-    const { data: applicationsData, error: applicationsError } =
-      await supabase
+    try {
+
+      const {
+        data: applicationsData,
+        error: applicationsError,
+      } = await supabase
         .from("applications")
         .select("*")
         .order("created_at", { ascending: false })
 
-    // FETCH JOBS
-    const { data: jobsData, error: jobsError } =
-      await supabase
+      const {
+        data: jobsData,
+        error: jobsError,
+      } = await supabase
         .from("jobs")
         .select("*")
         .order("created_at", { ascending: false })
 
-        // FETCH CONTACT MESSAGES
-    const { data: messagesData, error: messagesError } =
-      await supabase
-        .from("contact_messages")
+      const {
+        data: messagesData,
+        error: messagesError,
+      } = await supabase
+        .from("contacts")
         .select("*")
         .order("created_at", { ascending: false })
 
-    if (applicationsError) {
-      console.log(applicationsError)
+      const {
+        data: employerRequestsData,
+        error: employerRequestsError,
+      } = await supabase
+        .from("employer_requests")
+        .select("*")
+        .order("created_at", { ascending: false })
+
+      console.log("===== DASHBOARD DEBUG =====")
+      console.log("APPLICATIONS:", applicationsData)
+      console.log("JOBS:", jobsData)
+      console.log("MESSAGES:", messagesData)
+      console.log("EMPLOYER REQUESTS:", employerRequestsData)
+
+      console.log("APPLICATION ERROR:", applicationsError)
+      console.log("JOBS ERROR:", jobsError)
+      console.log("MESSAGE ERROR:", messagesError)
+      console.log("EMPLOYER ERROR:", employerRequestsError)
+
+      setApplications(applicationsData || [])
+      setJobs(jobsData || [])
+      setMessages(messagesData || [])
+      setEmployerRequests(employerRequestsData || [])
+
+    } catch (err) {
+
+      console.error("FETCH ERROR:", err)
+
+    } finally {
+
+      setLoading(false)
+
     }
-
-    if (jobsError) {
-      console.log(jobsError)
-    }
-
-    if (messagesError) {
-        console.log(messagesError)
-    }
-
-    setApplications(applicationsData || [])
-    setJobs(jobsData || [])
-    setMessages(messagesData || [])
-
-    setLoading(false)
   }
 
   // DELETE APPLICATION
@@ -111,31 +135,92 @@ export default function AdminDashboard() {
     }
   }
 
-  // DELETE JOB
-  const deleteJob = async (id) => {
+    // DELETE JOB
+    const deleteJob = async (id) => {
+
+      const confirmDelete = window.confirm(
+        "Delete this job?"
+      )
+
+      if (!confirmDelete) return
+
+      const { error } = await supabase
+        .from("jobs")
+        .delete()
+        .eq("id", id)
+
+      if (error) {
+
+        alert("Failed to delete job")
+        console.log(error)
+
+      } else {
+
+        alert("Job deleted successfully")
+        fetchData()
+      }
+    }
+
+    // DELETE EMPLOYER REQUEST
+  const deleteEmployerRequest = async (id) => {
 
     const confirmDelete = window.confirm(
-      "Delete this job?"
+      "Delete this request?"
     )
 
     if (!confirmDelete) return
 
     const { error } = await supabase
-      .from("jobs")
+      .from("employer_requests")
       .delete()
       .eq("id", id)
 
     if (error) {
 
-      alert("Failed to delete job")
+      alert("Failed to delete request")
       console.log(error)
 
     } else {
 
-      alert("Job deleted successfully")
+      alert("Request deleted successfully")
+
+      if (
+        selectedRequest &&
+        selectedRequest.id === id
+      ) {
+        setSelectedRequest(null)
+      }
+
       fetchData()
+
     }
   }
+
+  // DELETE CONTACT MESSAGE
+  const deleteMessage = async (id) => {
+
+  console.log("Deleting message:", id)
+
+  const { data, error } = await supabase
+    .from("contacts")
+    .delete()
+    .eq("id", id)
+    .select()
+
+  console.log("DELETE MESSAGE DATA:", data)
+  console.log("DELETE MESSAGE ERROR:", error)
+
+  if (error) {
+
+    alert(error.message)
+
+  } else {
+
+    alert("Message deleted")
+
+    fetchData()
+  }
+}
 
   // ADD OR UPDATE JOB
   const handleSaveJob = async (e) => {
@@ -253,6 +338,47 @@ export default function AdminDashboard() {
     })
   }
 
+  // UPDATE REQUEST STATUS
+ // UPDATE REQUEST STATUS
+const updateRequestStatus = async (
+  id,
+  status,
+  stage
+) => {
+
+  console.log("Updating:", id, status, stage)
+
+  const { data, error } = await supabase
+    .from("employer_requests")
+    .update({
+      request_status: status,
+      request_stage: stage,
+    })
+    .eq("id", id)
+    .select()
+
+  console.log("UPDATE RESULT:", data)
+  console.log("UPDATE ERROR:", error)
+
+  if (error) {
+
+    alert(error.message)
+
+  } else {
+
+    alert("Request updated")
+
+    fetchData()
+
+    setSelectedRequest({
+      ...selectedRequest,
+      request_status: status,
+      request_stage: stage,
+    })
+  }
+}
+
+   
   // LOGIN SCREEN
   if (!isAdmin) {
 
@@ -366,6 +492,20 @@ export default function AdminDashboard() {
                 <h2 className="text-5xl font-bold">
                     {messages.length}
                 </h2>
+
+
+
+        </div>
+
+        <div className="bg-white rounded-3xl shadow-xl p-8">
+
+          <h3 className="text-gray-500 mb-3">
+            Employer Requests
+          </h3>
+
+          <h2 className="text-5xl font-bold">
+            {employerRequests.length}
+          </h2>
 
         </div>
 
@@ -680,6 +820,10 @@ export default function AdminDashboard() {
                     Message
                 </th>
 
+                <th className="text-left py-4">
+                  Actions
+                </th>
+
                 </tr>
 
             </thead>
@@ -705,6 +849,19 @@ export default function AdminDashboard() {
                     {message.message}
                     </td>
 
+                    <td>
+
+                      <button
+                        onClick={() =>
+                          deleteMessage(message.id)
+                        }
+                        className="bg-red-600 text-white px-4 py-2 rounded-xl"
+                      >
+                        Delete
+                      </button>
+
+                    </td>
+
                 </tr>
 
                 ))}
@@ -714,6 +871,117 @@ export default function AdminDashboard() {
             </table>
 
          )}
+
+        </div>
+
+        {/* EMPLOYER REQUESTS */}
+
+        <div className="bg-white rounded-3xl shadow-2xl p-8 mb-16 overflow-x-auto">
+
+          <h2 className="text-3xl font-bold mb-8">
+            Employer Recruitment Requests
+          </h2>
+
+          {employerRequests.length === 0 ? (
+
+            <p>No employer requests found.</p>
+
+          ) : (
+
+            <table className="w-full min-w-[1400px]">
+
+              <thead>
+
+                <tr className="border-b">
+
+                  <th className="text-left py-4">Employer</th>
+                  <th className="text-left py-4">Phone</th>
+                  <th className="text-left py-4">Position</th>
+                  <th className="text-left py-4">Staff</th>
+                  <th className="text-left py-4">Salary</th>
+                  <th className="text-left py-4">City</th>
+                  <th className="text-left py-4">Status</th>
+                  <th className="text-left py-4">Stage</th>
+                  <th className="text-left py-4">Actions</th>
+
+                </tr>
+
+              </thead>
+
+              <tbody>
+
+                {employerRequests.map((request) => (
+
+                  <tr
+                    key={request.id}
+                    className="border-b"
+                  >
+
+                    <td className="py-4">
+                      {request.full_name}
+                    </td>
+
+                    <td>
+                      {request.phone}
+                    </td>
+
+                    <td>
+                      {request.position_needed}
+                    </td>
+
+                    <td>
+                      {request.staff_count}
+                    </td>
+
+                    <td>
+                      {request.salary_budget}
+                    </td>
+
+                    <td>
+                      {request.city}
+                    </td>
+
+                    <td>
+                      {request.request_status}
+                    </td>
+
+                    <td>
+                      {request.request_stage}
+                    </td>
+
+                    <td>
+
+                      <div className="flex gap-2">
+
+                        <button
+                          onClick={() => setSelectedRequest(request)}
+                          className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+                        >
+                          Preview
+                        </button>
+
+                        <button
+                          onClick={() =>
+                            deleteEmployerRequest(request.id)
+                          }
+                          className="bg-red-600 text-white px-4 py-2 rounded-xl"
+                        >
+                          Delete
+                        </button>
+
+                      </div>
+
+                    </td>
+
+                  </tr>
+
+                ))}
+
+              </tbody>
+
+            </table>
+
+          )}
 
         </div>
 
@@ -812,6 +1080,147 @@ export default function AdminDashboard() {
         </div>
 
       </div>
+
+            {selectedRequest && (
+
+        <div className="fixed inset-0 bg-black/60 flex items-center justify-center z-50">
+
+          <div className="bg-white max-w-4xl w-full p-8 rounded-3xl overflow-y-auto max-h-[90vh]">
+
+            <h2 className="text-3xl font-bold mb-6">
+              Employer Request Details
+            </h2>
+
+            <p><strong>Name:</strong> {selectedRequest.full_name}</p>
+            <p><strong>Email:</strong> {selectedRequest.email}</p>
+            <p><strong>Phone:</strong> {selectedRequest.phone}</p>
+            <p><strong>Position:</strong> {selectedRequest.position_needed}</p>
+            <p><strong>Salary:</strong> {selectedRequest.salary_budget}</p>
+            <p><strong>City:</strong> {selectedRequest.city}</p>
+            <p><strong>Address:</strong> {selectedRequest.address}</p>
+
+            <p>
+              <strong>Languages:</strong>{" "}
+              {Array.isArray(selectedRequest.languages)
+                ? selectedRequest.languages.join(", ")
+                : selectedRequest.languages}
+            </p>
+
+            <p>
+              <strong>Preferred Languages:</strong>{" "}
+              {Array.isArray(selectedRequest.preferred_languages)
+                ? selectedRequest.preferred_languages.join(", ")
+                : selectedRequest.preferred_languages}
+            </p>
+
+            <p>
+              <strong>Nationality:</strong>{" "}
+              {selectedRequest.preferred_nationality}
+            </p>
+
+            <p>
+              <strong>Experience:</strong>{" "}
+              {selectedRequest.experience_required}
+            </p>
+
+            <p>
+              <strong>Skills:</strong>{" "}
+              {selectedRequest.special_skills}
+            </p>
+
+            <p>
+              <strong>Notes:</strong>{" "}
+              {selectedRequest.notes}
+            </p>
+
+            <hr className="my-6" />
+
+            <h3 className="text-2xl font-bold mb-4">
+              Update Request Status
+            </h3>
+
+            <div className="flex flex-wrap gap-3">
+
+              <button
+                onClick={() =>
+                  updateRequestStatus(
+                    selectedRequest.id,
+                    "Under Review",
+                    "Reviewing"
+                  )
+                }
+                className="bg-yellow-500 text-white px-4 py-2 rounded-xl"
+              >
+                Under Review
+              </button>
+
+              <button
+                onClick={() =>
+                  updateRequestStatus(
+                    selectedRequest.id,
+                    "Candidate Search",
+                    "Searching"
+                  )
+                }
+                className="bg-blue-600 text-white px-4 py-2 rounded-xl"
+              >
+                Candidate Search
+              </button>
+
+              <button
+                onClick={() =>
+                  updateRequestStatus(
+                    selectedRequest.id,
+                    "Interviews",
+                    "Interviewing"
+                  )
+                }
+                className="bg-purple-600 text-white px-4 py-2 rounded-xl"
+              >
+                Interviews
+              </button>
+
+              <button
+                onClick={() =>
+                  updateRequestStatus(
+                    selectedRequest.id,
+                    "Completed",
+                    "Finished"
+                  )
+                }
+                className="bg-green-600 text-white px-4 py-2 rounded-xl"
+              >
+                Completed
+              </button>
+
+            </div>
+
+            <div className="mt-6 p-4 bg-gray-100 rounded-xl">
+
+              <p>
+                <strong>Current Status:</strong>{" "}
+                {selectedRequest.request_status}
+              </p>
+
+              <p>
+                <strong>Current Stage:</strong>{" "}
+                {selectedRequest.request_stage}
+              </p>
+
+            </div>
+
+            <button
+              onClick={() => setSelectedRequest(null)}
+              className="mt-6 bg-red-600 text-white px-6 py-3 rounded-xl"
+            >
+              Close
+            </button>
+
+          </div>
+
+        </div>
+
+      )}
 
     </section>
   )

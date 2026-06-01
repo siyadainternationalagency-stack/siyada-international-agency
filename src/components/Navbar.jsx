@@ -7,7 +7,7 @@ export default function Navbar() {
 
   return (
 
-    <nav className="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-lg shadow-md z-50 border-b border-gray-100">
+    <nav className="fixed top-0 left-0 w-full bg-white/90 backdrop-blur-xl shadow-lg z-50 border-b border-gray-200">
 
       <div className="max-w-7xl mx-auto px-6 py-4 flex items-center justify-between">
 
@@ -18,17 +18,17 @@ export default function Navbar() {
         >
 
           <h1 className="text-2xl md:text-3xl font-black tracking-tight text-black leading-tight">
-            Siyada International
+            Precious Siyada
           </h1>
 
-          <span className="text-sm text-gray-500 font-medium">
+          <span className="text-xs md:text-sm text-gray-500 font-medium">
             Recruitment & Domestic Staffing Agency
           </span>
 
         </Link>
 
         {/* DESKTOP MENU */}
-        <div className="hidden lg:flex items-center gap-8">
+        <div className="hidden xl:flex items-center gap-7">
 
           <a
             href="#home"
@@ -66,6 +66,13 @@ export default function Navbar() {
           </a>
 
           <a
+            href="#hire-staff"
+            className="text-gray-700 hover:text-black font-semibold transition duration-300"
+          >
+            Hire Staff
+          </a>
+
+          <a
             href="#contact"
             className="text-gray-700 hover:text-black font-semibold transition duration-300"
           >
@@ -77,7 +84,7 @@ export default function Navbar() {
             href="https://wa.me/966552591568"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-black text-white px-6 py-3 rounded-2xl font-semibold hover:scale-105 transition duration-300 shadow-xl"
+            className="bg-black text-white px-5 py-3 rounded-2xl font-semibold shadow-xl hover:scale-105 hover:bg-gray-800 transition duration-300"
           >
             WhatsApp
           </a>
@@ -85,7 +92,7 @@ export default function Navbar() {
           {/* ADMIN BUTTON */}
           <Link
             to="/admin"
-            className="bg-green-600 text-white px-6 py-3 rounded-2xl font-semibold hover:scale-105 transition duration-300 shadow-xl"
+            className="bg-green-600 text-white px-5 py-3 rounded-2xl font-semibold shadow-xl hover:scale-105 hover:bg-green-700 transition duration-300"
           >
             Admin
           </Link>
@@ -93,22 +100,22 @@ export default function Navbar() {
         </div>
 
         {/* MOBILE RIGHT SIDE */}
-        <div className="flex items-center gap-3 lg:hidden">
+        <div className="flex items-center gap-3 xl:hidden">
 
           {/* MOBILE WHATSAPP */}
           <a
             href="https://wa.me/966552591568"
             target="_blank"
             rel="noopener noreferrer"
-            className="bg-black text-white px-4 py-2 rounded-xl text-sm font-semibold"
+            className="bg-black text-white px-4 py-2 rounded-xl text-sm font-semibold shadow-lg"
           >
             WhatsApp
           </a>
 
-          {/* MOBILE MENU BUTTON */}
+          {/* MENU BUTTON */}
           <button
             onClick={() => setMenuOpen(!menuOpen)}
-            className="text-3xl text-black"
+            className="text-3xl text-black font-bold"
           >
             {menuOpen ? "✕" : "☰"}
           </button>
@@ -120,13 +127,13 @@ export default function Navbar() {
       {/* MOBILE MENU */}
       {menuOpen && (
 
-        <div className="lg:hidden bg-white border-t shadow-2xl">
+        <div className="xl:hidden bg-white border-t shadow-2xl">
 
           <div className="flex flex-col px-6 py-8 gap-5">
 
             <a
               href="#home"
-              className="text-gray-700 hover:text-black font-semibold"
+              className="text-gray-700 hover:text-black font-semibold text-lg"
               onClick={() => setMenuOpen(false)}
             >
               Home
@@ -134,7 +141,7 @@ export default function Navbar() {
 
             <a
               href="#about"
-              className="text-gray-700 hover:text-black font-semibold"
+              className="text-gray-700 hover:text-black font-semibold text-lg"
               onClick={() => setMenuOpen(false)}
             >
               About
@@ -142,7 +149,7 @@ export default function Navbar() {
 
             <a
               href="#services"
-              className="text-gray-700 hover:text-black font-semibold"
+              className="text-gray-700 hover:text-black font-semibold text-lg"
               onClick={() => setMenuOpen(false)}
             >
               Services
@@ -150,7 +157,7 @@ export default function Navbar() {
 
             <a
               href="#jobs"
-              className="text-gray-700 hover:text-black font-semibold"
+              className="text-gray-700 hover:text-black font-semibold text-lg"
               onClick={() => setMenuOpen(false)}
             >
               Jobs
@@ -158,15 +165,23 @@ export default function Navbar() {
 
             <a
               href="#apply"
-              className="text-gray-700 hover:text-black font-semibold"
+              className="text-gray-700 hover:text-black font-semibold text-lg"
               onClick={() => setMenuOpen(false)}
             >
               Apply
             </a>
 
             <a
+              href="#hire-staff"
+              className="text-gray-700 hover:text-black font-semibold text-lg"
+              onClick={() => setMenuOpen(false)}
+            >
+              Hire Staff
+            </a>
+
+            <a
               href="#contact"
-              className="text-gray-700 hover:text-black font-semibold"
+              className="text-gray-700 hover:text-black font-semibold text-lg"
               onClick={() => setMenuOpen(false)}
             >
               Contact
@@ -176,7 +191,7 @@ export default function Navbar() {
             <Link
               to="/admin"
               onClick={() => setMenuOpen(false)}
-              className="bg-green-600 text-white px-6 py-4 rounded-2xl text-center font-bold"
+              className="bg-green-600 text-white px-6 py-4 rounded-2xl text-center font-bold shadow-xl hover:bg-green-700 transition duration-300"
             >
               Open Admin Dashboard
             </Link>

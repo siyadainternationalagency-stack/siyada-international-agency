@@ -19,7 +19,7 @@ export default function Services() {
           </h2>
 
           <p className="text-lg text-gray-600 max-w-3xl mx-auto leading-relaxed">
-            Siyada International Agency provides professional recruitment
+            Precious Siyada International Recruiting Agency provides professional recruitment
             services for luxury households, royal families, and private
             residences throughout Saudi Arabia.
           </p>
@@ -201,7 +201,7 @@ export default function Services() {
           </h3>
 
           <p className="text-gray-300 text-lg max-w-3xl mx-auto leading-relaxed mb-8">
-            Siyada International Agency connects families and employers
+            Precious Siyada International Recruiting Agency connects families and employers
             with trusted, experienced, and highly qualified domestic
             professionals across Saudi Arabia.
           </p>

@@ -8,11 +8,11 @@ export default function About() {
         <div className="text-center mb-12">
 
           <h2 className="text-4xl md:text-5xl font-bold text-gray-900 mb-6">
-            About Siyada International Agency
+            About Precious Siyada International Recruiting Agency
           </h2>
 
           <p className="text-lg text-gray-600 max-w-4xl mx-auto leading-relaxed">
-            Siyada International Agency is a premium recruitment agency specializing
+            Precious Siyada International Recruiting Agency is a premium recruitment agency specializing
             in placing highly qualified domestic staff, childcare professionals,
             hospitality personnel, and private palace staff with distinguished
             families in Riyadh and across Saudi Arabia.

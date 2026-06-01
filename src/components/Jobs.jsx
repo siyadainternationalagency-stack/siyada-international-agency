@@ -6,7 +6,7 @@ export default function Jobs() {
 
   // OWNER PASSWORD
   // Change this password to your own secure password
-  const OWNER_PASSWORD = "SiyadaAdmin123"
+  const OWNER_PASSWORD = "13489341Jesus"
 
   // STATES
   const [jobs, setJobs] = useState([])
